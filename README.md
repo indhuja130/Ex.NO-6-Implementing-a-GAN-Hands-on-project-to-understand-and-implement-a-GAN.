@@ -1,171 +1,470 @@
-# Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.
-## Aim :To Understand and implement a GAN
-Generative Adversarial Network (GAN)
-Generative Adversarial Networks (GAN) can generate realistic images by learning from existing image datasets. Here we will be implementing a GAN trained on the CIFAR-10 dataset using PyTorch.
-## Procedure:
-Step 1: Importing Required Libraries
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torchvisionfrom torchvision
-import datasets, transforms
-import matplotlib.pyplot as plt
-import numpy as np
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-Step 2: Defining Image Transformations
-Use PyTorch’s transforms to convert images to tensors and normalize pixel values between -1 and 1 for better training stability.
-transform = transforms.Compose([
-transforms.ToTensor(),
-transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-Step 3: Loading the CIFAR-10 Dataset
-Download and load the CIFAR-10 dataset with defined transformations. Use a DataLoader to process the dataset in mini-batches of size 32 and shuffle the data
 
-train_dataset = datasets.CIFAR10(root='./data',train=True, download=True, transform=transform)
-dataloader = torch.utils.data.DataLoader(train_dataset,batch_size=32, shuffle=True)
+Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.
 
-Step 4: Defining GAN Hyperparameters
-Set important training parameters:
-•	latent_dim: Dimensionality of the noise vector.
-•	lr: Learning rate of the optimizer.
-•	beta1, beta2: Beta parameters for Adam optimizer (e.g 0.5, 0.999)
-•	num_epochs: Number of times the entire dataset will be processed (e.g 10)
+Type / to search
 
-latent_dim = 100
-lr = 0.0002
-beta1 = 0.5
-beta2 = 0.999
-num_epochs = 10
 
-Step 5: Building the Generator
-Create a neural network that converts random noise into images. Use transpose convolutional layers, batch normalization and ReLU activations. The final layer uses Tanh activation to scale outputs to the range [-1, 1].
-•	nn.Linear(latent_dim, 128 * 8 * 8): Defines a fully connected layer that projects the noise vector into a higher dimensional feature space.
-•	nn.Upsample(scale_factor=2): Doubles the spatial resolution of the feature maps by upsampling.
-•	nn.Conv2d(128, 128, kernel_size=3, padding=1): Applies a convolutional layer keeping the number of channels the same to refine features.
+User avatar
+Repository navigation
+Code
+Pull requests
+Actions
+Projects
+Security and quality
+Insights
+jenitaa678
+Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.
+Public
+forked from NaliniG007/Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.
 
-class Generator(nn.Module):
-    def __init__(self, latent_dim):
-        super(Generator, self).__init__()
+Watch
+0
+ (0)
+Fork0 (0)
 
-        self.model = nn.Sequential(
-            nn.Linear(latent_dim, 128 * 8 * 8),
-            nn.ReLU(),
-            nn.Unflatten(1, (128, 8, 8)),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(128, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128, momentum=0.78),
-            nn.ReLU(),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(128, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64, momentum=0.78),
-            nn.ReLU(),
-            nn.Conv2d(64, 3, kernel_size=3, padding=1),
-            nn.Tanh()
-        )
 
-    def forward(self, z):
-        img = self.model(z)
-        return img
-Step 6: Building the Discriminator
-Create a binary classifier network that distinguishes real from fake images. Use convolutional layers, batch normalization, dropout, LeakyReLU activation and a Sigmoid output layer to give a probability between 0 and 1.
-•	nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1): Second convolutional layer increasing channels to 64, downsampling further.
-•	nn.BatchNorm2d(256, momentum=0.8): Batch normalization for 256 feature maps with momentum 0.8.
-class Discriminator(nn.Module):
-    def __init__(self):
-        super(Discriminator, self).__init__()
+Star0 (0)
 
-        self.model = nn.Sequential(
-        nn.Conv2d(3, 32, kernel_size=3, stride=2, padding=1),
-        nn.LeakyReLU(0.2),
-        nn.Dropout(0.25),
-        nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),
-        nn.ZeroPad2d((0, 1, 0, 1)),
-        nn.BatchNorm2d(64, momentum=0.82),
-        nn.LeakyReLU(0.25),
-        nn.Dropout(0.25),
-        nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
-        nn.BatchNorm2d(128, momentum=0.82),
-        nn.LeakyReLU(0.2),
-        nn.Dropout(0.25),
-        nn.Conv2d(128, 256, kernel_size=3, stride=1,padding=1),
-        nn.BatchNorm2d(256, momentum=0.8),
-        nn.LeakyReLU(0.25),
-        nn.Dropout(0.25),
-        nn.Flatten(),
-        nn.Linear(256 * 5 * 5, 1),
-        nn.Sigmoid()
+
+main
+1 Branch
+0 Tags
+Go to file
+t
+T
+Add file
+Add file
+
+Code
+This branch is 1 commit ahead of NaliniG007/Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.:main.
+Latest commit
+jenitaa678
+jenitaa678
+Update README.md
+fc85d4b
+ · 
+2 months ago
+History
+2 Commits
+Folders and files
+Name		
+README.md
+Update README.md
+2 months ago
+Repository files navigation
+README
+
+
+Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.
+Aim :To Understand and implement a GAN
+Generative Adversarial Network (GAN) Generative Adversarial Networks (GAN) can generate realistic images by learning from existing image datasets. Here we will be implementing a GAN trained on the CIFAR-10 dataset using PyTorch.
+
+THEORY
+Generative Adversarial Network (GAN) A Generative Adversarial Network (GAN) is a type of deep-learning model used to generate new data that resembles the data used for training. A GAN consists of two neural networks that compete with each other:
+a) Generator
+
+The Generator is responsible for creating new synthetic data.
+
+It receives a random input called noise or latent vector and converts it into a generated sample.
+
+For example:
+
+Random Noise → Generator → Generated Image
+
+The main objective of the Generator is to produce data that looks similar to real training data and can fool the Discriminator.
+
+b) Discriminator
+
+The Discriminator is responsible for identifying whether the input data is real or generated.
+
+It receives both:
+
+Real data from the training dataset Fake data generated by the Generator
+
+The Discriminator produces an output indicating whether the input is:
+
+Real Data or Fake Data
+
+The objective of the Discriminator is to correctly distinguish between real and generated samples.
+
+c) Adversarial Training
+
+The Generator and Discriminator are trained together in a competitive process.
+
+The Generator tries to create realistic data. The Discriminator tries to identify fake data. The Generator improves based on the feedback from the Discriminator.
+
+This competition between the two networks is called adversarial training.
+
+The overall process can be represented as:
+
+Random Noise → Generator → Generated Data → Discriminator
+
+At the same time:
+
+Real Training Data → Discriminator
+
+The Discriminator compares both real and generated data during training.
+
+WORKING PRINCIPLE
+The working of a GAN can be explained in several stages.
+
+Step 1: Data Collection
+
+A dataset containing real samples is collected.
+
+For example, the dataset may contain:
+
+Handwritten digit images Human face images Objects Medical images Other types of digital data
+
+The real dataset is used to train the Discriminator.
+
+Step 2: Random Noise Generation
+
+A random vector is generated as the input to the Generator.
+
+This random input is also called:
+
+Noise vector Latent vector Random input
+
+For example:
+
+Random Noise → Generator
+
+Step 3: Data Generation
+
+The Generator processes the random noise using a neural network and produces a new synthetic sample.
+
+For example:
+
+Random Noise → Generator → Fake Image
+
+Initially, the generated image may not look realistic.
+
+However, the Generator improves as the training process continues.
+
+Step 4: Real and Fake Data Input
+
+The Discriminator receives two types of data:
+
+Real data from the original training dataset. Fake data generated by the Generator.
+
+For example:
+
+Real Image → Discriminator
+
+Generated Image → Discriminator
+
+Step 5: Discriminator Training
+
+The Discriminator learns to identify the difference between real and fake data.
+
+It attempts to classify the input as:
+
+Input Data → Real / Fake
+
+The Discriminator is trained to improve its ability to identify generated samples.
+
+Step 6: Generator Training
+
+The Generator is trained using the feedback produced by the Discriminator.
+
+If the Discriminator correctly identifies generated data as fake, the Generator adjusts its parameters.
+
+The Generator gradually learns to create more realistic data.
+
+For example:
+
+Generator → Generate Data → Discriminator Feedback → Improve Generator
+
+Step 7: Adversarial Learning
+
+The Generator and Discriminator are repeatedly trained.
+
+The process continues as follows:
+
+Generator creates fake data. Discriminator evaluates the data. Discriminator learns to identify real and fake samples. Generator learns to produce more realistic samples.
+
+This process is repeated for many training iterations.
+
+Step 8: Generated Output
+
+After sufficient training, the Generator can create synthetic data that resembles the original training dataset.
+
+For example:
+
+Random Noise → Trained Generator → New Generated Image
+
+BLOCK DIAGRAM
+                  REAL TRAINING DATA
+                         │
+                         ▼
+                   ┌─────────────┐
+                   │DISCRIMINATOR│
+                   └─────────────┘
+                         ▲
+                         │
+                         │ Generated Data
+                         │
+Random Noise             │
+     │                   │
+     ▼                   │
+┌─────────────┐          │
+│  GENERATOR  │──────────┘
+└─────────────┘
+     │
+     ▼
+Generated / Fake Data
+     │
+     ▼
+DISCRIMINATOR OUTPUT
+     │
+     ▼
+ Real Data / Fake Data
+     │
+     ▼
+Feedback and Network Training
+     │
+     └──────────────► Generator and Discriminator
+
+The overall GAN process can be represented as:
+
+Random Noise → Generator → Generated Data → Discriminator → Real/Fake Classification → Feedback → Continuous Training
+
+HANDS-ON IMPLEMENTATION
+The GAN can be implemented using a deep-learning framework such as TensorFlow or PyTorch.
+
+The implementation mainly contains the following components:
+
+Dataset Loading
+The training dataset is loaded and preprocessed.
+
+The data may be normalized before training so that the neural network can process it efficiently.
+
+Generator Model Creation
+A neural network is created to generate synthetic data from random noise.
+
+Input:
+
+Random Noise
+
+Output:
+
+Generated Sample
+
+Discriminator Model Creation
+Another neural network is created to classify the input data.
+
+Input:
+
+Real or Generated Data
+
+Output:
+
+Probability of Real or Fake
+
+Training the Discriminator
+The Discriminator is trained using:
+
+Real training samples with real labels. Generated samples with fake labels. 5. Training the Generator
+
+The Generator is trained to improve its ability to produce data that can be classified as real by the Discriminator.
+
+Continuous Training
+Both networks are trained repeatedly for several epochs.
+
+During training:
+
+Generator Performance → Improves
+
+Discriminator Performance → Adapts
+
+The generated samples are monitored to observe the improvement of the GAN.
+
+APPLICATIONS
+Image Generation
+GANs can generate new images based on patterns learned from training data.
+
+For example:
+
+Face generation Object generation Artwork generation 2. Image Enhancement
+
+GANs can improve the quality of images.
+
+They can be used for:
+
+Image restoration Resolution enhancement Noise reduction 3. Data Augmentation
+
+GANs can generate additional synthetic data for machine-learning applications.
+
+This can be useful when the available training data is limited.
+
+Image-to-Image Translation
+GANs can transform one type of image into another.
+
+For example:
+
+Converting sketches into realistic images Changing image styles Generating artistic versions of images 5. Medical Imaging
+
+GANs can be used to generate or enhance medical images for research and machine-learning applications.
+
+Entertainment and Media
+GAN technology can be used in:
+
+Digital art Animation Visual effects Game content generation 7. Synthetic Data Generation
+
+GANs can generate artificial datasets that resemble real-world data for experimentation and research.
+
+ADVANTAGES
+GANs can generate realistic synthetic data. They can learn complex patterns from training datasets. GANs can be used for image generation and enhancement. They can help increase the amount of available training data. GANs support creative applications such as digital art and content generation. They can generate new samples without directly copying the original data. GANs have applications in many fields, including healthcare, entertainment, and computer vision. LIMITATIONS AND CHALLENGES
+
+Difficult Training Process
+GANs can be difficult to train because two neural networks must learn simultaneously.
+
+Training Instability
+The Generator and Discriminator may not always improve at the same rate.
+
+This can make the training process unstable.
+
+Mode Collapse
+In some cases, the Generator may produce only a limited variety of outputs instead of generating diverse samples.
+
+High Computational Requirements
+Training GAN models may require significant computational resources, especially for large datasets and high-resolution images.
+
+Evaluation Difficulty
+It can be difficult to measure the quality of generated data using a single evaluation method.
+
+FUTURE SCOPE
+GAN technology is expected to play an increasingly important role in artificial intelligence and generative applications.
+
+Future developments may include:
+
+More stable GAN training methods Improved image quality High-resolution data generation Better synthetic datasets Improved medical image generation Advanced image enhancement Creative content generation Integration with other AI technologies
+
+Advances in deep learning and computational systems may allow GANs to generate more realistic and useful synthetic data.
+
+Procedure:
+Step 1: Importing Required Libraries import torch import torch.nn as nn import torch.optim as optim import torchvisionfrom torchvision import datasets, transforms import matplotlib.pyplot as plt import numpy as np device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') Step 2: Defining Image Transformations Use PyTorch’s transforms to convert images to tensors and normalize pixel values between -1 and 1 for better training stability. transform = transforms.Compose([ transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]) Step 3: Loading the CIFAR-10 Dataset Download and load the CIFAR-10 dataset with defined transformations. Use a DataLoader to process the dataset in mini-batches of size 32 and shuffle the data
+
+train_dataset = datasets.CIFAR10(root='./data',train=True, download=True, transform=transform) dataloader = torch.utils.data.DataLoader(train_dataset,batch_size=32, shuffle=True)
+
+Step 4: Defining GAN Hyperparameters Set important training parameters: • latent_dim: Dimensionality of the noise vector. • lr: Learning rate of the optimizer. • beta1, beta2: Beta parameters for Adam optimizer (e.g 0.5, 0.999) • num_epochs: Number of times the entire dataset will be processed (e.g 10)
+
+latent_dim = 100 lr = 0.0002 beta1 = 0.5 beta2 = 0.999 num_epochs = 10
+
+Step 5: Building the Generator Create a neural network that converts random noise into images. Use transpose convolutional layers, batch normalization and ReLU activations. The final layer uses Tanh activation to scale outputs to the range [-1, 1]. • nn.Linear(latent_dim, 128 * 8 * 8): Defines a fully connected layer that projects the noise vector into a higher dimensional feature space. • nn.Upsample(scale_factor=2): Doubles the spatial resolution of the feature maps by upsampling. • nn.Conv2d(128, 128, kernel_size=3, padding=1): Applies a convolutional layer keeping the number of channels the same to refine features.
+
+class Generator(nn.Module): def init(self, latent_dim): super(Generator, self).init()
+
+    self.model = nn.Sequential(
+        nn.Linear(latent_dim, 128 * 8 * 8),
+        nn.ReLU(),
+        nn.Unflatten(1, (128, 8, 8)),
+        nn.Upsample(scale_factor=2),
+        nn.Conv2d(128, 128, kernel_size=3, padding=1),
+        nn.BatchNorm2d(128, momentum=0.78),
+        nn.ReLU(),
+        nn.Upsample(scale_factor=2),
+        nn.Conv2d(128, 64, kernel_size=3, padding=1),
+        nn.BatchNorm2d(64, momentum=0.78),
+        nn.ReLU(),
+        nn.Conv2d(64, 3, kernel_size=3, padding=1),
+        nn.Tanh()
     )
 
-    def forward(self, img):
-        validity = self.model(img)
-        return validity
-Step 7: Initializing GAN Components
-•	Generator and Discriminator are initialized on the available device (GPU or CPU).
-•	Binary Cross-Entropy (BCE) Loss is chosen as the loss function.
-•	Adam optimizers are defined separately for the generator and discriminator with specified learning rates and betas.
-generator = Generator(latent_dim).to(device)discriminator = Discriminator().to(device)
-adversarial_loss = nn.BCELoss()
-optimizer_G = optim.Adam(generator.parameters()
-                         , lr=lr, betas=(beta1, beta2))optimizer_D = optim.Adam(discriminator.parameters()
-                         , lr=lr, betas=(beta1, beta2))
+def forward(self, z):
+    img = self.model(z)
+    return img
 
-Step 8: Training the GAN
-Train the discriminator on real and fake images, then update the generator to improve its fake image quality. Track losses and visualize generated images after each epoch.
-•	valid = torch.ones(real_images.size(0), 1, device=device): Create a tensor of ones representing real labels for the discriminator.
-•	fake = torch.zeros(real_images.size(0), 1, device=device): Create a tensor of zeros representing fake labels for the discriminator.
-•	z = torch.randn(real_images.size(0), latent_dim, device=device): Generate random noise vectors as input for the generator.
-•	g_loss = adversarial_loss(discriminator(gen_images), valid): Calculate generator loss based on the discriminator classifying fake images as real.
-•	grid = torchvision.utils.make_grid(generated, nrow=4, normalize=True): Arrange generated images into a grid for display, normalizing pixel values.
-for epoch in range(num_epochs):
-    for i, batch in enumerate(dataloader):
-       
-        real_images = batch[0].to(device) 
-       
-      valid = torch.ones(real_images.size(0), 1, device=device)
-      fake = torch.zeros(real_images.size(0), 1, device=device)
-       
-        real_images = real_images.to(device)
+Step 6: Building the Discriminator Create a binary classifier network that distinguishes real from fake images. Use convolutional layers, batch normalization, dropout, LeakyReLU activation and a Sigmoid output layer to give a probability between 0 and 1. • nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1): Second convolutional layer increasing channels to 64, downsampling further. • nn.BatchNorm2d(256, momentum=0.8): Batch normalization for 256 feature maps with momentum 0.8. class Discriminator(nn.Module): def init(self): super(Discriminator, self).init()
 
-        optimizer_D.zero_grad()
-       
+    self.model = nn.Sequential(
+    nn.Conv2d(3, 32, kernel_size=3, stride=2, padding=1),
+    nn.LeakyReLU(0.2),
+    nn.Dropout(0.25),
+    nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),
+    nn.ZeroPad2d((0, 1, 0, 1)),
+    nn.BatchNorm2d(64, momentum=0.82),
+    nn.LeakyReLU(0.25),
+    nn.Dropout(0.25),
+    nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+    nn.BatchNorm2d(128, momentum=0.82),
+    nn.LeakyReLU(0.2),
+    nn.Dropout(0.25),
+    nn.Conv2d(128, 256, kernel_size=3, stride=1,padding=1),
+    nn.BatchNorm2d(256, momentum=0.8),
+    nn.LeakyReLU(0.25),
+    nn.Dropout(0.25),
+    nn.Flatten(),
+    nn.Linear(256 * 5 * 5, 1),
+    nn.Sigmoid()
+)
+
+def forward(self, img):
+    validity = self.model(img)
+    return validity
+
+Step 7: Initializing GAN Components • Generator and Discriminator are initialized on the available device (GPU or CPU). • Binary Cross-Entropy (BCE) Loss is chosen as the loss function. • Adam optimizers are defined separately for the generator and discriminator with specified learning rates and betas. generator = Generator(latent_dim).to(device)discriminator = Discriminator().to(device) adversarial_loss = nn.BCELoss() optimizer_G = optim.Adam(generator.parameters() , lr=lr, betas=(beta1, beta2))optimizer_D = optim.Adam(discriminator.parameters() , lr=lr, betas=(beta1, beta2))
+
+Step 8: Training the GAN Train the discriminator on real and fake images, then update the generator to improve its fake image quality. Track losses and visualize generated images after each epoch. • valid = torch.ones(real_images.size(0), 1, device=device): Create a tensor of ones representing real labels for the discriminator. • fake = torch.zeros(real_images.size(0), 1, device=device): Create a tensor of zeros representing fake labels for the discriminator. • z = torch.randn(real_images.size(0), latent_dim, device=device): Generate random noise vectors as input for the generator. • g_loss = adversarial_loss(discriminator(gen_images), valid): Calculate generator loss based on the discriminator classifying fake images as real. • grid = torchvision.utils.make_grid(generated, nrow=4, normalize=True): Arrange generated images into a grid for display, normalizing pixel values. for epoch in range(num_epochs): for i, batch in enumerate(dataloader):
+
+    real_images = batch[0].to(device) 
+   
+  valid = torch.ones(real_images.size(0), 1, device=device)
+  fake = torch.zeros(real_images.size(0), 1, device=device)
+   
+    real_images = real_images.to(device)
+
+    optimizer_D.zero_grad()
+
 z = torch.randn(real_images.size(0), latent_dim, device=device)
-      
-        fake_images = generator(z)
 
-real_loss = adversarial_loss(discriminator(real_images), valid)
-fake_loss=adversarial_loss(discriminator(fake_images.detach()), fake)
-        d_loss = (real_loss + fake_loss) / 2
+    fake_images = generator(z)
+
+real_loss = adversarial_loss(discriminator(real_images), valid) fake_loss=adversarial_loss(discriminator(fake_images.detach()), fake) d_loss = (real_loss + fake_loss) / 2
+
+    d_loss.backward()
+    optimizer_D.step()
+
+    optimizer_G.zero_grad()
+  
+    gen_images = generator(z)
     
-        d_loss.backward()
-        optimizer_D.step()
+    g_loss = adversarial_loss(discriminator(gen_images),valid)
+    g_loss.backward()
+    optimizer_G.step()
 
-        optimizer_G.zero_grad()
-      
-        gen_images = generator(z)
-        
-        g_loss = adversarial_loss(discriminator(gen_images),valid)
-        g_loss.backward()
-        optimizer_G.step()
 if (i + 1) % 100 == 0:
 
+if (i + 1) % 100 == 0: print( f"Epoch [{epoch+1}/{num_epochs}] Batch {i+1}/{len(dataloader)} " f"Discriminator Loss: {d_loss.item():.4f} " f"Generator Loss: {g_loss.item():.4f}" ) if (epoch + 1) % 10 == 0: with torch.no_grad(): z = torch.randn(16, latent_dim, device=device) generated = generator(z).detach().cpu() grid = torchvision.utils.make_grid(generated, nrow=4, normalize=True) plt.imshow(np.transpose(grid, (1, 2, 0))) plt.axis("off") plt.show()
 
-if (i + 1) % 100 == 0:
-            print(
-                f"Epoch [{epoch+1}/{num_epochs}]                       Batch {i+1}/{len(dataloader)} "
-                f"Discriminator Loss: {d_loss.item():.4f} "
-                f"Generator Loss: {g_loss.item():.4f}"
-            )
-    if (epoch + 1) % 10 == 0:
-        with torch.no_grad():
-            z = torch.randn(16, latent_dim, device=device)
-            generated = generator(z).detach().cpu()
-            grid = torchvision.utils.make_grid(generated,
-                                        nrow=4, normalize=True)
-            plt.imshow(np.transpose(grid, (1, 2, 0)))
-            plt.axis("off")
-            plt.show()
+RESULT
+The study successfully explored the concept and implementation of a Generative Adversarial Network.
 
-    
+It was understood that two neural networks, namely the Generator and the Discriminator, work together in a competitive training process.
 
+The Generator creates synthetic data, while the Discriminator attempts to distinguish between real and generated data.
 
-## Conclusion:
+Through continuous training, the Generator can improve its ability to generate realistic samples
+
+Conclusion:
 Thus successfully implemented and trained a GAN that learns to generate realistic CIFAR-10 images through adversarial training.
+
+About
+No description, website, or topics provided.
+Resources
+Readme
+Activity
+Stars
+0 stars
+Watchers
+0 watching
+Forks
+0 forks
+Report repository
+Releases
+No releases published
+Packages
+No packages published
+Contributors
+No contributors
